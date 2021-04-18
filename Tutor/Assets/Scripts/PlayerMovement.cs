@@ -10,11 +10,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] bool hasJumped = false;
     [SerializeField] int collidersTouching = 0;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] GameObject playerModel;
+    [SerializeField] GameObject playerArms;
 
     // Update is called once per frame
     void Update()
@@ -24,6 +21,16 @@ public class PlayerMovement : MonoBehaviour
         float velX = Input.GetAxis("Horizontal") * speed;
         rb.velocity = new Vector3(velX, rb.velocity.y, 0);
 
+        if(velX > 0)
+        {
+            playerModel.transform.rotation = Quaternion.Euler(0, -120, 0);
+        }
+
+        else if( velX < 0)
+        {
+            playerModel.transform.rotation = Quaternion.Euler(0, -60, 0);
+        }
+
 
         Debug.DrawRay(transform.position, -transform.up * 1.1f, Color.red);
 
@@ -32,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
             if (Physics.Raycast(transform.position, -transform.up, 1.1f))
             {
                 hasJumped = false;
+                playerArms.transform.localPosition = new Vector3(0, 0, 0);
             }
         }
 
@@ -42,6 +50,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 rb.velocity = new Vector3(rb.velocity.x, jump, 0);
                 hasJumped = true;
+                playerArms.transform.localPosition = new Vector3(0, .8f, 0);
             }
         }
 
